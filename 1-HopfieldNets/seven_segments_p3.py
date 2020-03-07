@@ -59,14 +59,41 @@ def learn_pattern(pattern, weight_matrix, n):
             weight_matrix[j][i] = weight_matrix[i][j]
     return weight_matrix
 
+def recall_step(pattern, weight_matrix):
+    pattern_size = len(pattern)
+    for i in range(pattern_size):
+        sum = 0
+        for j in range(pattern_size):
+            sum += weight_matrix[i][j]
+        if sum >= 0: 
+            pattern[i] = 1
+        else:
+            pattern[i] = -1
+    return pattern
+
 def energy_of(pattern, weight_matrix):
     energy = 0
     pattern_size = len(pattern)
     for i in range(pattern_size):
-        for j in range(i + 1, pattern_size):
+        for j in range(pattern_size):
             energy += pattern[i] * weight_matrix[i][j] * pattern[j]
-    return -0.5 * energy
-    
+    energy = -0.5 * energy
+    print(energy)
+    return energy
+
+def recall(pattern, weight_matrix, convergence_steps):
+    previous_pattern = pattern
+    repetitions = 0
+    while (repetitions <= convergence_steps):
+        # print(pattern)
+        pattern = recall_step(pattern, weight_matrix)
+        seven_segment(three)
+        energy_of(pattern, weight_matrix)
+        if (pattern == previous_pattern):
+            repetitions += 1
+        else: 
+            repetitions = 0
+            previous_pattern = pattern
 
 # === MAIN PROGRAM === #
 
@@ -86,11 +113,11 @@ weight_matrix = learn_pattern(six, weight_matrix, n)
 #submission.header("Denis Leandro Guardia Vaca")
 
 seven_segment(one)
-print(energy_of(one, weight_matrix))
+energy_of(one, weight_matrix)
 seven_segment(three)
-print(energy_of(three, weight_matrix))
+energy_of(three, weight_matrix)
 seven_segment(six)
-print(energy_of(six, weight_matrix))
+energy_of(six, weight_matrix)
 
 ##this assumes you have called your weight matrix "weight_matrix"
 # submission.section("Weight matrix")
@@ -100,9 +127,8 @@ print("test1")
 #submission.section("Test 1")
 
 test = [ 1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1 ]
+recall(test, weight_matrix, 3)
 
-seven_segment(test)
-print(energy_of(test, weight_matrix))
 #submission.seven_segment(test)
 ##for COMSM0027
 
@@ -116,12 +142,10 @@ print(energy_of(test, weight_matrix))
 #for the final submission it should also output to submission on each step
 
 print("test2")
+#submission.section("Test 2")
 
-test=[1,1,1,1,1,1,1,-1,-1,-1,-1]
-#submission.section("Test 1")
-
-seven_segment(test)
-print(energy_of(test, weight_matrix))
+test2 =[1, 1, 1, 1, 1, 1, 1,-1,-1,-1,-1]
+recall(test2, weight_matrix, 3)
 
 #submission.seven_segment(test)
 
@@ -137,6 +161,3 @@ print(energy_of(test, weight_matrix))
 
 
 #submission.bottomer()
-
-
-
