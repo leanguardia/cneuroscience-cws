@@ -2,7 +2,7 @@
 #so submission.README
 
 from math import *
-# from submission import *
+from submission import *
 
 def seven_segment(pattern):
 
@@ -51,6 +51,11 @@ def seven_segment(pattern):
 def initialize_weigth_matrix():
     return [[0.0 for col in range(11)] for row in range(11)]
 
+def report_pattern(pattern, weight_matrix):
+    submission.seven_segment(pattern)
+    submission.print_number(energy_of(pattern, weight_matrix))
+    submission.qquad()
+
 def learn_pattern(pattern, weight_matrix, n):
     pattern_size = len(pattern)
     for i in range(pattern_size):
@@ -85,7 +90,6 @@ def recall(pattern, weight_matrix, convergence_steps):
     previous_pattern = pattern
     repetitions = 0
     while (repetitions <= convergence_steps):
-        # print(pattern)
         pattern = recall_step(pattern, weight_matrix)
         seven_segment(three)
         energy_of(pattern, weight_matrix)
@@ -94,8 +98,12 @@ def recall(pattern, weight_matrix, convergence_steps):
         else: 
             repetitions = 0
             previous_pattern = pattern
+        report_pattern(pattern, weight_matrix)
 
 # === MAIN PROGRAM === #
+
+submission=Submission("denis_leandro_guardia_vaca")
+submission.header("Denis Leandro Guardia Vaca")
 
 one   = [-1,-1, 1,-1,-1, 1,-1, 1,-1,-1,-1]
 three = [ 1,-1, 1, 1,-1 ,1 ,1 ,1, 1,-1,-1]
@@ -104,60 +112,30 @@ n = 3
 
 weight_matrix = initialize_weigth_matrix()
 
-weight_matrix = learn_pattern(one, weight_matrix, n)
 weight_matrix = learn_pattern(three, weight_matrix, n)
 weight_matrix = learn_pattern(six, weight_matrix, n)
-# print(weight_matrix)
+weight_matrix = learn_pattern(one, weight_matrix, n)
+
+submission.section("Patterns")
+report_pattern(one, weight_matrix)
+report_pattern(three, weight_matrix)
+report_pattern(six, weight_matrix)
         
-#submission=Submission("Denis Leandro Guardia Vaca")
-#submission.header("Denis Leandro Guardia Vaca")
+submission.section("Weight matrix")
+submission.matrix_print("W",weight_matrix)
 
-seven_segment(one)
-energy_of(one, weight_matrix)
-seven_segment(three)
-energy_of(three, weight_matrix)
-seven_segment(six)
-energy_of(six, weight_matrix)
+print("Test 1")
+submission.section("Test 1")
 
-##this assumes you have called your weight matrix "weight_matrix"
-# submission.section("Weight matrix")
-# submission.matrix_print("W",weight_matrix)
+test1 = [ 1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1 ]
+report_pattern(test1, weight_matrix)
+recall(test1, weight_matrix, 2)
 
-print("test1")
-#submission.section("Test 1")
-
-test = [ 1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1 ]
-recall(test, weight_matrix, 3)
-
-#submission.seven_segment(test)
-##for COMSM0027
-
-##where energy is the energy of test
-#submission.print_number(energy)
-
-##this prints a space
-#submission.qquad()
-
-#here the network should run printing at each step
-#for the final submission it should also output to submission on each step
-
-print("test2")
-#submission.section("Test 2")
+print("Test 2")
+submission.section("Test 2")
 
 test2 =[1, 1, 1, 1, 1, 1, 1,-1,-1,-1,-1]
-recall(test2, weight_matrix, 3)
+report_pattern(test2, weight_matrix)
+recall(test2, weight_matrix, 2)
 
-#submission.seven_segment(test)
-
-##for COMSM0027
-##where energy is the energy of test
-#submission.print_number(energy)
-
-##this prints a space
-#submission.qquad()
-
-#here the network should run printing at each step
-#for the final submission it should also output to submission on each step
-
-
-#submission.bottomer()
+submission.bottomer()
