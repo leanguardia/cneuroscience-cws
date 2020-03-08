@@ -127,17 +127,18 @@ report_pattern(six, weight_matrix)
 submission.section("Weight matrix")
 submission.matrix_print("W",weight_matrix)
 
-submission.section("Recall - converges on 2 repetitions")
+convergence_steps = 2
+submission.section(f"Recall - converges on {convergence_steps} repetition(s)")
 print("Test 1")
 submission.section("Test 1")
 
 test1 = [1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1]
-result = recall(test1, weight_matrix, 2)
+result = recall(test1, weight_matrix, convergence_steps)
 
 print("Test 2")
 submission.section("Test 2")
 
 test2 =[1 ,1 ,1 ,1 ,1 ,1 ,1 ,-1,-1,-1,-1]
-result = recall(test2, weight_matrix, 2)
+result = recall(test2, weight_matrix, convergence_steps)
 
 submission.bottomer()
