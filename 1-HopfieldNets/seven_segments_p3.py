@@ -52,8 +52,12 @@ def initialize_weigth_matrix():
     return [[0.0 for col in range(11)] for row in range(11)]
 
 def report_pattern(pattern, weight_matrix):
+    energy = energy_of(pattern, weight_matrix)
+    seven_segment(pattern)
+    print(pattern)
+    print(energy)
     submission.seven_segment(pattern)
-    submission.print_number(energy_of(pattern, weight_matrix))
+    submission.print_number(energy)
     submission.qquad()
 
 def learn_pattern(pattern, weight_matrix, n):
@@ -66,15 +70,16 @@ def learn_pattern(pattern, weight_matrix, n):
 
 def recall_step(pattern, weight_matrix):
     pattern_size = len(pattern)
+    new_pattern = []
     for i in range(pattern_size):
         sum = 0
         for j in range(pattern_size):
-            sum += weight_matrix[i][j]
-        if sum >= 0: 
-            pattern[i] = 1
+            sum += weight_matrix[i][j] * pattern[j]
+        if sum > 0: 
+            new_pattern.append(1)
         else:
-            pattern[i] = -1
-    return pattern
+            new_pattern.append(-1)
+    return new_pattern
 
 def energy_of(pattern, weight_matrix):
     energy = 0
@@ -83,22 +88,20 @@ def energy_of(pattern, weight_matrix):
         for j in range(pattern_size):
             energy += pattern[i] * weight_matrix[i][j] * pattern[j]
     energy = -0.5 * energy
-    print(energy)
     return energy
 
 def recall(pattern, weight_matrix, convergence_steps):
     previous_pattern = pattern
     repetitions = 0
-    while (repetitions <= convergence_steps):
+    while (repetitions < convergence_steps):
+        report_pattern(pattern, weight_matrix)
         pattern = recall_step(pattern, weight_matrix)
-        seven_segment(three)
-        energy_of(pattern, weight_matrix)
         if (pattern == previous_pattern):
             repetitions += 1
         else: 
             repetitions = 0
             previous_pattern = pattern
-        report_pattern(pattern, weight_matrix)
+    return pattern
 
 # === MAIN PROGRAM === #
 
@@ -112,11 +115,11 @@ n = 3
 
 weight_matrix = initialize_weigth_matrix()
 
-weight_matrix = learn_pattern(three, weight_matrix, n)
-weight_matrix = learn_pattern(six, weight_matrix, n)
 weight_matrix = learn_pattern(one, weight_matrix, n)
+weight_matrix = learn_pattern(six, weight_matrix, n)
+weight_matrix = learn_pattern(three, weight_matrix, n)
 
-submission.section("Patterns")
+submission.section("Learned Patterns")
 report_pattern(one, weight_matrix)
 report_pattern(three, weight_matrix)
 report_pattern(six, weight_matrix)
@@ -124,18 +127,17 @@ report_pattern(six, weight_matrix)
 submission.section("Weight matrix")
 submission.matrix_print("W",weight_matrix)
 
+submission.section("Recall - converges on 2 repetitions")
 print("Test 1")
 submission.section("Test 1")
 
-test1 = [ 1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1 ]
-report_pattern(test1, weight_matrix)
-recall(test1, weight_matrix, 2)
+test1 = [1,-1, 1, 1,-1, 1, 1,-1,-1,-1,-1]
+result = recall(test1, weight_matrix, 2)
 
 print("Test 2")
 submission.section("Test 2")
 
-test2 =[1, 1, 1, 1, 1, 1, 1,-1,-1,-1,-1]
-report_pattern(test2, weight_matrix)
-recall(test2, weight_matrix, 2)
+test2 =[1 ,1 ,1 ,1 ,1 ,1 ,1 ,-1,-1,-1,-1]
+result = recall(test2, weight_matrix, 2)
 
 submission.bottomer()
