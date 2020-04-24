@@ -35,6 +35,19 @@ def fano_factor(spike_train, big_t, interval_window):
     mean  = np.mean(counts)
     return variance / mean
 
+def time_intervals(spike_train):
+    intervals = []
+    for i in range(1,len(spike_train)):
+        intervals.append(spike_train[i] - spike_train[i - 1])
+    return intervals
+
+def coefficient_of_variation(spike_train):
+    intervals = time_intervals(spike_train)
+    standard_dev = np.std(intervals)
+    mean = np.mean(intervals)
+    return standard_dev / mean
+
+
 ######### MAIN #########
 
 Hz = 1.0
@@ -55,10 +68,17 @@ spikes_count = len(spike_train)
 
 print("Spikes", spikes_count)
 print("-->", spikes_count / big_t, "spikes/sec")
-# print(spike_train)
+print(spike_train)
 
 # Q1
 # Fano Factor
 interval_window = 100 * ms
 fano = fano_factor(spike_train, big_t, interval_window)
 print(fano)
+
+# time_intervals = time_intervals(spike_train)
+# print(len(time_intervals))
+# print(time_intervals)
+
+coeff_of_var = coefficient_of_variation(spike_train)
+print(coeff_of_var)
