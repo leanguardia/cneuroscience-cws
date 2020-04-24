@@ -48,37 +48,59 @@ def coefficient_of_variation(spike_train):
     return standard_dev / mean
 
 
-######### MAIN #########
+######### Q1 #########
 
 Hz = 1.0
 ms = 0.001
 sec = 1.0
 
-rate = 15.0 * Hz
-tau_ref = 5 * ms
-big_t = 5 * sec
+rate = 35.0 * Hz
+tau_ref = 0 * ms
+big_t = 1000 * sec
 
-print("Input params")
+print("... Input params ...")
 print("Firing Rate:", rate, "Hz")
 print("Refractory Period:", tau_ref, "ms")
 print("Big T:", big_t, "sec")
 
-spike_train = get_spike_train(rate, big_t, tau_ref)
-spikes_count = len(spike_train)
+interval_window = 10 * ms
 
-print("Spikes", spikes_count)
-print("-->", spikes_count / big_t, "spikes/sec")
-print(spike_train)
+fano_factors = []
+coeff_vars = []
+N = 100
+print("N of samples:", N)
+print("... Calculating Results ...")
 
-# Q1
-# Fano Factor
-interval_window = 100 * ms
-fano = fano_factor(spike_train, big_t, interval_window)
-print(fano)
+while N:
+    spike_train = get_spike_train(rate, big_t, tau_ref)
+    spikes_count = len(spike_train)
 
-# time_intervals = time_intervals(spike_train)
-# print(len(time_intervals))
-# print(time_intervals)
+    # print("Spikes", spikes_count)
+    # print("-->", spikes_count / big_t, "spikes/sec")
+    # print(spike_train)
 
-coeff_of_var = coefficient_of_variation(spike_train)
-print(coeff_of_var)
+    # --- Fano Factor ---
+    # spike_counts = spike_counts(spike_train, big_t, interval_window)
+    # print(len(spike_counts))
+    # print(spike_counts)
+    fano = fano_factor(spike_train, big_t, interval_window)
+    fano_factors.append(fano)
+    # print("FanoFactor:", fano)
+
+    # --- Coefficient ---
+    # intervals = time_intervals(spike_train)
+    # print(len(intervals))
+    # print(intervals)
+    coeff_of_var = coefficient_of_variation(spike_train)
+    coeff_vars.append(coeff_of_var)
+    # print("CoeffVar:", coeff_of_var)
+
+    N -= 1
+
+fano_mean = round(np.mean(fano_factors), 3)
+fano_sdtev = round(np.std(fano_factors), 4)
+print("Fano Factor:", fano_mean, '±', fano_sdtev)
+
+coeff_var_mean = round(np.mean(coeff_vars), 3)
+coeff_var_sdtev = round(np.std(coeff_vars), 4)
+print("Coeff of Variance:", coeff_var_mean, '±', coeff_var_sdtev)
