@@ -25,11 +25,15 @@ def spike_counts(spike_train, big_t, interval_window):
     spike_counts = np.zeros(total_bins)
     bin = 1
     for spike_time in spike_train:
-        if spike_time > (bin * interval_window): bin += 1
+        if spike_time >= (bin * interval_window): bin += 1
         spike_counts[bin - 1] += 1
     return spike_counts
 
-# def fano_factor(spike_train, big_t, interval_window):
+def fano_factor(spike_train, big_t, interval_window):
+    counts = spike_counts (spike_train, big_t, interval_window)
+    variance = np.var(counts)
+    mean  = np.mean(counts)
+    return variance / mean
 
 ######### MAIN #########
 
@@ -51,11 +55,10 @@ spikes_count = len(spike_train)
 
 print("Spikes", spikes_count)
 print("-->", spikes_count / big_t, "spikes/sec")
-print(spike_train)
+# print(spike_train)
 
 # Q1
 # Fano Factor
 interval_window = 100 * ms
-spike_counts = spike_counts(spike_train, big_t, interval_window)
-print(len(spike_counts))
-print(spike_counts)
+fano = fano_factor(spike_train, big_t, interval_window)
+print(fano)
