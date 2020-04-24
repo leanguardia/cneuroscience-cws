@@ -1,4 +1,5 @@
 import random as rnd
+import numpy as np
 
 # the function returns a spike trains for the interval [0, big_t]
 # with overall firing rate and refractory period tau_ref.
@@ -35,10 +36,9 @@ print("Refractory Period:", tau_ref, "ms")
 print("Big T:", big_t, "sec")
 
 spike_train = get_spike_train(rate, big_t, tau_ref)
+spikes_count = len(spike_train)
 
-length = len(spike_train)
-print("Length", length)
+print("Spikes", spikes_count)
+print("-->", spikes_count / big_t, "spikes/sec")
 
-print("XYZ", length / big_t)
-
-print(spike_train)
+# print(spike_train)
