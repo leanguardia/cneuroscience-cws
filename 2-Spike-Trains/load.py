@@ -14,33 +14,34 @@ def generate_spiking_times(event_sequence, sample_time = 0.002):
     elapsed_time += sample_time
   return spike_train
 
-file_path = os.getenv('ABS_PATH') + "/rho.dat"
-spikes = load_data(file_path, int)
-
-print("Lenght of data:",len(spikes))
-print("Firing Events:", np.sum(spikes))
-print(spikes[0:18])
 
 ##### Q2 #####
+if __name__ == "__main__":
+  file_path = os.getenv('ABS_PATH') + "/rho.dat"
+  spikes = load_data(file_path, int)
 
-# Fano Factor
-spikes_mean = np.mean(spikes)
-spikes_var = np.var(spikes)
+  print("Lenght of data:",len(spikes))
+  print("Firing Events:", np.sum(spikes))
+  print(spikes[0:18])
 
-fano_factor = spikes_var / spikes_mean
-print("Fano Factor:", fano_factor)
+  # Fano Factor
+  spikes_mean = np.mean(spikes)
+  spikes_var = np.var(spikes)
 
-# Coeff of Variance
-spike_train = generate_spiking_times(spikes)
-print("Activations detected:", len(spike_train))
-# print(spike_train[0:10])
-# print(spike_train[-10:])
+  fano_factor = spikes_var / spikes_mean
+  print("Fano Factor:", fano_factor)
 
-coeff_of_var = coefficient_of_variation(spike_train)
-print("Coeff of Var:", coeff_of_var)
+  # Coeff of Variance
+  spike_train = generate_spiking_times(spikes)
+  print("Activations detected:", len(spike_train))
+  # print(spike_train[0:10])
+  # print(spike_train[-10:])
 
-#stimulus=[float(x) for x in load_data("stim.dat")]
-# stimulus = load_data("stim.dat",float)
+  coeff_of_var = coefficient_of_variation(spike_train)
+  print("Coeff of Var:", coeff_of_var)
 
-# print(len(stimulus))
-# print(stimulus[0:5])
+  #stimulus=[float(x) for x in load_data("stim.dat")]
+  # stimulus = load_data("stim.dat",float)
+
+  # print(len(stimulus))
+  # print(stimulus[0:5])
