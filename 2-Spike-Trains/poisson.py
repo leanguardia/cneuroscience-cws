@@ -22,6 +22,7 @@ def get_spike_train(rate, big_t, tau_ref):
 
 def spike_counts(spike_train, big_t, interval_window):
     big_t_ms = big_t * 1000
+    # print("Big T", big_t, "total_bins", big_t_ms)
     total_bins = int(big_t_ms / interval_window)
     spike_counts = np.zeros(total_bins)
     for spike_time in spike_train:
@@ -32,6 +33,8 @@ def spike_counts(spike_train, big_t, interval_window):
 
 def fano_factor(spike_train, big_t, interval_window):
     counts = spike_counts(spike_train, big_t, interval_window)
+    # print(counts[0:100])
+    # print(counts[:100])
     variance = np.var(counts)
     mean  = np.mean(counts)
     return variance / mean
