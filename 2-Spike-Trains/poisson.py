@@ -57,41 +57,42 @@ if __name__ == "__main__":
     sec = 1.0
 
     rate = 35.0 * Hz
-    tau_ref = 0 * ms
+    tau_ref = 5 * ms
     big_t = 1000 * sec
+
+    interval_window = 10 * ms
+
+    N = 1
 
     print("... Input params ...")
     print("Firing Rate:", rate, "Hz")
     print("Refractory Period:", tau_ref, "ms")
     print("Big T:", big_t, "sec")
+    print("Interval window:", interval_window)
 
-    interval_window = 10 * ms
+    print("N of samples:", N, '\n')
+    print("... Calculating Results ...")
 
     fano_factors = []
     coeff_vars = []
-    N = 100
-    print("N of samples:", N)
-    print("... Calculating Results ...")
 
     while N:
+        # --- Generate Spike Train ---
         spike_train = get_spike_train(rate, big_t, tau_ref)
-        spikes_count = len(spike_train)
-
+        # spikes_count = len(spike_train)
         # print("Spikes", spikes_count)
         # print("-->", spikes_count / big_t, "spikes/sec")
         # print(spike_train)
 
         # --- Fano Factor ---
         # spike_counts = spike_counts(spike_train, big_t, interval_window)
-        # print(len(spike_counts))
         # print(spike_counts)
         fano = fano_factor(spike_train, big_t, interval_window)
         fano_factors.append(fano)
         # print("FanoFactor:", fano)
 
-        # --- Coefficient ---
+        # --- Coefficient of Var ---
         # intervals = time_intervals(spike_train)
-        # print(len(intervals))
         # print(intervals)
         coeff_of_var = coefficient_of_variation(spike_train)
         coeff_vars.append(coeff_of_var)
