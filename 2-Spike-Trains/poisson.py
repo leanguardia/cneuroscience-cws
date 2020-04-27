@@ -21,16 +21,17 @@ def get_spike_train(rate, big_t, tau_ref):
     return spike_train
 
 def spike_counts(spike_train, big_t, interval_window):
-    total_bins = int(big_t / interval_window)
+    big_t_ms = big_t * 1000
+    total_bins = int(big_t_ms / interval_window)
     spike_counts = np.zeros(total_bins)
-    bin = 1
     for spike_time in spike_train:
-        if spike_time >= (bin * interval_window): bin += 1
-        spike_counts[bin - 1] += 1
+        vin = int((spike_time * 1000)/ interval_window)
+        # print("Bins", total_bins, "Time", spike_time, "vin", vin)
+        spike_counts[vin] += 1
     return spike_counts
 
 def fano_factor(spike_train, big_t, interval_window):
-    counts = spike_counts (spike_train, big_t, interval_window)
+    counts = spike_counts(spike_train, big_t, interval_window)
     variance = np.var(counts)
     mean  = np.mean(counts)
     return variance / mean
@@ -60,9 +61,9 @@ if __name__ == "__main__":
     tau_ref = 5 * ms
     big_t = 1000 * sec
 
-    interval_window = 10 * ms
+    interval_window = 10
 
-    N = 1
+    N = 100
 
     print("... Input params ...")
     print("Firing Rate:", rate, "Hz")
@@ -86,7 +87,7 @@ if __name__ == "__main__":
 
         # --- Fano Factor ---
         # spike_counts = spike_counts(spike_train, big_t, interval_window)
-        # print(spike_counts)
+        # print("Len counts", len(spike_counts))
         fano = fano_factor(spike_train, big_t, interval_window)
         fano_factors.append(fano)
         # print("FanoFactor:", fano)
@@ -100,10 +101,10 @@ if __name__ == "__main__":
 
         N -= 1
 
-    fano_mean = round(np.mean(fano_factors), 3)
-    fano_sdtev = round(np.std(fano_factors), 4)
+    fano_mean = round(np.mean(fano_factors), 4)
+    fano_sdtev = round(np.std(fano_factors), 5)
     print("Fano Factor:", fano_mean, '±', fano_sdtev)
 
-    coeff_var_mean = round(np.mean(coeff_vars), 3)
-    coeff_var_sdtev = round(np.std(coeff_vars), 4)
+    coeff_var_mean = round(np.mean(coeff_vars), 4)
+    coeff_var_sdtev = round(np.std(coeff_vars), 5)
     print("Coeff of Variance:", coeff_var_mean, '±', coeff_var_sdtev)
